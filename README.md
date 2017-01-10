@@ -21,7 +21,7 @@ gmake
 sudo gmake install
 export CMAKE_ROOT=/usr/share/cmake-3.7
 cd ..
-wget https://dl.cihar.com/gammu/releases/gammu-1.38.1.tar.gz
+wget https://dl.cihar.com/gammu/releases/gammu-1.38.0.tar.gz
 tar zxvf gammu-1.38.0.tar.gz 
 cd gammu-1.38.0
 ./configure --prefix=/usr

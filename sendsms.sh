@@ -1,4 +1,5 @@
 #!/bin/sh
+
 HOME=/etc
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 MOBILE_NUMBER=`echo "$1" | sed s#\s##`

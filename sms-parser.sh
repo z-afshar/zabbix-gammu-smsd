@@ -15,10 +15,10 @@ echo "message : $msg from: $from " >> $LOGFILE
 # Handle commands
 case $msg in
 	"A")
-            	/opt/gammu/a.exp $from &
+            	/opt/gammu/a.sh $from &
         ;;
 	"B")
-            	/opt/gammu/b.exp $from &
+            	/opt/gammu/b.sh $from &
         ;;
 	"C")
             	/opt/gammu/c.exp > $LOGFILE 2>&1 

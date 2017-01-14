@@ -145,5 +145,13 @@ zabbix  ALL=NOPASSWD:/usr/bin/gammu-smsd-inject
 
 ## create script media type in your zabbix server administration page
 ![z1](https://cloud.githubusercontent.com/assets/6551116/21954448/2c6cfc50-da66-11e6-8239-e1fb073d32a0.png)
+## add sendsms media to corresponding user
+![2](https://cloud.githubusercontent.com/assets/6551116/21954485/2ee8a42e-da67-11e6-8dcc-2e58101626d0.png)
+## create action (Event Source : Triggers)
+![3](https://cloud.githubusercontent.com/assets/6551116/21954486/31f2773a-da67-11e6-8300-36ec1270cd60.png)
+## send sms to zabbix administrators in case of problem
+![4](https://cloud.githubusercontent.com/assets/6551116/21954487/3533979e-da67-11e6-9703-0ae3823e68ec.png)
+
+
 
 

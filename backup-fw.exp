@@ -1,0 +1,51 @@
+#!/bin/expect -f
+
+# Set variables
+# ip address of cisco ASA Firewall
+ set hostname "192.168.123.123"
+ set username "admin"
+ set password passw0rd1234
+ set enablepassword ""
+
+# Log results
+ log_file -a /tmp/results.log
+
+# Announce which device we are working on and at what time
+ send_user "\n"
+ send_user ">>>>>  Working on $hostname @ [exec date] <<<<<\n"
+ send_user "\n"
+
+# Don't check keys
+ spawn ssh -o StrictHostKeyChecking=no $username\@$hostname
+
+# Allow this script to handle ssh connection issues
+ expect {
+ timeout { send_user "\nTimeout Exceeded - Check Host\n"; exit 1 }
+ eof { send_user "\nSSH Connection To $hostname Failed\n"; exit 1 }
+ "*#" {}
+ "*assword:" {
+ send "$password\n"
+ }
+ }
+
+# If we're not already in enable mode, get us there
+ expect {
+ default { send_user "\nEnable Mode Failed - Check Password\n"; exit 1 }
+ "*#" {}
+ "*>" {
+ send "enable\n"
+ expect "*assword"
+ send "$enablepassword\n"
+ expect "*#"
+ }
+ }
+
+ send "write mem\n"
+ expect "#"
+ send "copy /noconfirm running-config tftp://192.168.123.45/fw/$hostname.txt\n"
+ expect "#"
+
+ send "exit\n"
+ expect ":~\$"
+ exit
+

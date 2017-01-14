@@ -141,7 +141,9 @@ Sat 2017/01/14 13:35:39 gammu-smsd[19931]: Read 0 messages
 #visudo
 // add following line to /etc/sudoers so zabbix user can send sms
 zabbix  ALL=NOPASSWD:/usr/bin/gammu-smsd-inject
-
-// create script media type in your zabbix server administration page
-![z1](https://cloud.githubusercontent.com/assets/6551116/21954448/2c6cfc50-da66-11e6-8239-e1fb073d32a0.png)
 </pre>
+
+## create script media type in your zabbix server administration page
+![z1](https://cloud.githubusercontent.com/assets/6551116/21954448/2c6cfc50-da66-11e6-8239-e1fb073d32a0.png)
+
+

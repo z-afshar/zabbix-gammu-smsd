@@ -20,8 +20,8 @@ case $msg in
 	"PING")
             	/opt/gammu/pong.sh $from &
         ;;
-	"C")
-            	/opt/gammu/c.exp > $LOGFILE 2>&1 
+	"BACKUP")
+            	/opt/gammu/backup-fw.exp > $LOGFILE 2>&1 
         ;;
 	*) echo "undefined command $msg " >> $LOGFILE
 esac

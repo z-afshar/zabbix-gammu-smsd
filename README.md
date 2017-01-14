@@ -11,6 +11,7 @@ All message sending & receiving is performed by <a href="https://wammu.eu/docs/m
 
 2- Install gammu & gammu-smsd from repo or from source. I personally instelled latest version (1.38.0) from source code with following commands:
 <pre>
+cd ~
 mkdir src
 cd src
 sudo yum group install 'Development Tools'
@@ -53,4 +54,75 @@ gammuloc =
 #echo "hello" | gammu --sendsms TEXT "+98XXXXXXXXXXX"
 </pre>
 
-4- TO DO..
+4- create database for using in gammu-smsd
+<pre>
+// install mysql server
+wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+yum localinstall mysql57-community-release-el7-7.noarch.rpm
+yum repolist enabled | grep "mysql.*-community.*"
+yum install mysql-community-server
+systemctl enable mysqld.service
+systemctl start mysqld.service
+// determine mysql root temporary password
+grep 'temporary password' /var/log/mysqld.log
+mysql_secure_installation
+//login to mysql
+mysql -uroot -p
+mysql> create database smsdb;
+mysql> grant all privileges on smsdb.* to 'smsd'@'localhost' identified by 'passw0rd';
+mysql> flush privileges;
+mysql> quit;
+
+// import gammu-smsd mysql schema to database
+cd ~/src/gammu-1.38.0/docs/sql
+// replace date string in mysql.sql file to avoid mysql error
+sed -ie 's/0000-00-00/1980-01-01/g' mysql.sql
+mysql -u smsd -p smsdb < mysql.sql
+</pre>
+
+5- config gammu-smsd : (see "man gammu-smsdrc" for details)
+<pre>
+// edit configuration file
+nano /etc/gammu-smsdrc
+[gammu]
+port = /dev/ttyUSB0
+connection = at115200
+
+[smsd]
+service = sql
+driver = native_mysql
+host = localhost
+user = smsd
+password = passw0rd
+database = smsdb
+debuglevel = 1
+LogFile = /var/log/gammu/smsd.log
+RunOnReceive = /opt/gammu/sms-parser.sh
+InboxFormat = unicode
+OutboxFormat = unicode
+TransmitFormat = auto
+
+// create log & script directories
+mkdir -p /var/log/gammu
+mkdir -p /opt/gammu
+
+// restart gammu-smsd service
+systemctl restart gammu-smsd
+
+// chack log file for ensure everything is working
+tail -fn10 /var/log/gammu/smsd.log
+// you should see something like this:
+Sat 2017/01/14 13:35:33 gammu-smsd[19930]: mode: Send=1, Receive=1
+Sat 2017/01/14 13:35:33 gammu-smsd[19930]: deliveryreport = no
+Sat 2017/01/14 13:35:33 gammu-smsd[19930]: phoneid = 
+Sat 2017/01/14 13:35:33 gammu-smsd[19931]: Connected to Database: smsdb on localhost
+Sat 2017/01/14 13:35:33 gammu-smsd[19931]: Database structures version: 16, SMSD current version: 16
+Sat 2017/01/14 13:35:33 gammu-smsd[19931]: Connected to Database native_mysql: smsdb on localhost
+Sat 2017/01/14 13:35:33 gammu-smsd[19931]: Created POSIX RW shared memory at 0x7f400cfdd000
+Sat 2017/01/14 13:35:33 gammu-smsd[19931]: Starting phone communication...
+Sat 2017/01/14 13:35:38 gammu-smsd[19931]: Inserting phone info
+Sat 2017/01/14 13:35:39 gammu-smsd[19931]: Read 0 messages
+
+// send test message with gammu-smsd-inject ( see "man gammu-smsd-inject" )
+gammu-smsd-inject TEXT +98XXXXXXXXXX -text "message"
+</pre>

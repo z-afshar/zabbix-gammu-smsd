@@ -17,8 +17,8 @@ case $msg in
 	"A")
             	/opt/gammu/a.sh $from &
         ;;
-	"B")
-            	/opt/gammu/b.sh $from &
+	"PING")
+            	/opt/gammu/pong.sh $from &
         ;;
 	"C")
             	/opt/gammu/c.exp > $LOGFILE 2>&1 

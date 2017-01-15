@@ -12,6 +12,7 @@ fi
 
 echo "message : $msg from: $from " >> $LOGFILE
 
+
 # Handle commands
 case $msg in
 	"A")

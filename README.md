@@ -9,3 +9,4 @@ All message sending & receiving is performed by <a href="https://wammu.eu/docs/m
 See <a href="https://github.com/z-afshar/zabbix-gammu-smsd/wiki/zabbix-gammu-smsd-Installation-Guide"> wiki </a>of this project for required steps.
 
 
+test PR
